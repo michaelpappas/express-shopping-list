@@ -1,6 +1,7 @@
 /** Routes for sample app. */
 
 const express = require("express");
+
 const {NotFoundError} = require("./expressError")
 
 const db = require("./fakeDb");
@@ -19,7 +20,7 @@ router.post("/", function (req, res) {
   db.items.push(newItem);
   // console.log("Fake DB now=", db.items)
 
-  res.json({added: newItem})
+  res.status(201).json({added: newItem})
 });
 
 
@@ -30,7 +31,7 @@ router.get("/:id", function (req, res) {
   const product = db.items.find( ({name}) => name === req.params.id)
 
   if(product){
-    res.json({"added":product})
+    res.json(product)
   }
   else{
     throw new NotFoundError()
@@ -55,14 +56,15 @@ router.patch("/:id", function (req, res) {
   }
 });
 
+/** DELETE /items: delete an new item. Returns {deleted: } */
 router.delete("/:id", function (req, res) {
 
   const product = db.items.find( ({name}) => name === req.params.id)
-
+  debugger;
   if(product){
     db.items = db.items.filter(item => item != product)
 
-    res.json({"deleted":product})
+    res.json({"message": "deleted" })
   }
   else{
     throw new NotFoundError()
